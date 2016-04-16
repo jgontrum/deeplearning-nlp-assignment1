@@ -1,17 +1,8 @@
-blocks==0.2.0
-blocks-extras==0.0.0
-bokeh==0.11.1
-fuel==0.2.0
-h5py==2.6.0
-numexpr==2.5.2
-numpy==1.11.0
-picklable-itertools==0.1.1
-Pillow==3.2.0
-progressbar2==3.6.2
-python-dateutil==2.5.2
-pytz==2016.3
-six==1.10.0
-tables==3.2.2
-Theano==0.8.1
-toolz==0.7.4
-wheel==0.29.0
+pip
+bokeh==0.10
+git+git://github.com/mila-udem/blocks.git -r https://raw.githubusercontent.com/mila-udem/blocks/master/requirements.txt
+git+git://github.com/mila-udem/fuel.git
+git+git://github.com/mila-udem/blocks-extras.git
+git+git://github.com/Theano/Theano.git
+numpy
+matplotlib
