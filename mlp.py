@@ -15,7 +15,6 @@ from blocks.model import Model
 from blocks.extensions.monitoring import DataStreamMonitoring
 from blocks.extensions import FinishAfter, Printing
 
-
 shrooms_train, shrooms_test = get_mushroom_data()
 
 x = tensor.matrix('features')
@@ -25,23 +24,27 @@ hidden_to_output = Linear(name='hidden_to_output', input_dim=50, output_dim=2)
 y_hat = Softmax().apply(hidden_to_output.apply(h))
 
 y = tensor.lmatrix('targets')
-cost = CategoricalCrossEntropy().apply(y.flatten(), y_hat)
+cost = CategoricalCrossEntropy().apply(y, y_hat)
 
 cg = ComputationGraph(cost)
-# W1, W2 = VariableFilter(roles=[WEIGHT])(cg.variables)
-# cost = cost + 0.005 * (W1 ** 2).sum() + 0.005 * (W2 ** 2).sum()
-# cost.name = 'cost_with_regularization'
+W1, W2 = VariableFilter(roles=[WEIGHT])(cg.variables)
+cost = cost + 0.005 * (W1 ** 2).sum() + 0.005 * (W2 ** 2).sum()
+cost.name = 'cost_with_regularization'
 
-input_to_hidden.weights_init = hidden_to_output.weights_init = IsotropicGaussian(0.01)
+input_to_hidden.weights_init = hidden_to_output.weights_init = IsotropicGaussian(
+    0.01)
 input_to_hidden.biases_init = hidden_to_output.biases_init = Constant(0)
 input_to_hidden.initialize()
 hidden_to_output.initialize()
 
-data_stream = Flatten(DataStream.default_stream(shrooms_train))
+data_stream = Flatten(DataStream.default_stream(
+    shrooms_train,
+    iteration_scheme=SequentialScheme(shrooms_train.num_examples, batch_size=200)))
 
 algorithm = GradientDescent(cost=cost, parameters=cg.parameters,
-    step_rule=Scale(learning_rate=0.1))
+                            step_rule=Scale(learning_rate=0.1))
 
-main_loop = MainLoop(data_stream=data_stream, algorithm=algorithm)
+main_loop = MainLoop(data_stream=data_stream, algorithm=algorithm,
+                     extensions=[FinishAfter(after_n_epochs=10), ])
 
 main_loop.run()
