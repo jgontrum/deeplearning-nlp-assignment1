@@ -35,7 +35,7 @@ def get_mushroom_data():
         sparse=False, dtype=np.uint8).fit_transform(labels_)
 
     # Split into train and test.
-    split_at = int(len(data) * 0.9)
+    split_at = int(len(data) * 0.7)
     X_training, X_test = features[:split_at, :], features[split_at:, :]
     y_training, y_test = labels[:split_at, :], labels[split_at:, :]
 
