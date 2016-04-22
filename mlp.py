@@ -45,8 +45,9 @@ def shroom_mlp(shrooms_train, shrooms_test, num_epochs, hidden_dims,
     # And now the cost function
     cost = CategoricalCrossEntropy().apply(y, y_hat)
     cg = ComputationGraph(cost)
+    # Not needed for now:
     W1, W2 = VariableFilter(roles=[WEIGHT])(cg.variables)
-    cost = cost + 0.005 * (W1 ** 2).sum() + 0.005 * (W2 ** 2).sum()
+    cost = cost + 0.001 * (W1 ** 2).sum() + 0.001 * (W2 ** 2).sum()
     cost.name = 'cost_with_regularization'
 
     error_rate = MisclassificationRate().apply(y.argmax(axis=1), y_hat)
@@ -56,7 +57,7 @@ def shroom_mlp(shrooms_train, shrooms_test, num_epochs, hidden_dims,
     data_stream = Flatten(DataStream.default_stream(
         shrooms_train,
         iteration_scheme=SequentialScheme(shrooms_train.num_examples,
-                                          batch_size=50)))
+                                          batch_size=128)))
 
     test_data_stream = Flatten(DataStream.default_stream(
         shrooms_test,
@@ -66,7 +67,7 @@ def shroom_mlp(shrooms_train, shrooms_test, num_epochs, hidden_dims,
     extensions = [
         ProgressBar(),
         PlotWeights(after_epoch=True,
-                    folder="results_logistic_40",
+                    folder="results_logistic_40_interpolation",
                     computation_graph=cg,
                     folder_per_layer=True,
                     dpi=150),
@@ -99,8 +100,8 @@ if __name__ == '__main__':
 
     shroom_mlp(shrooms_train,
                shrooms_test,
+               100,
                10,
-               40,
                Logistic())
 
     # epochs = range(1, 11)
