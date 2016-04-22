@@ -33,7 +33,6 @@ class PlotWeights(SimpleExtension):
             raise ValueError("Please specify at least the computation_graph.")
         super(PlotWeights, self).__init__(**super_kwargs)
 
-
     def do(self, which_callback, *args):
         # logger.info("Plotting weights (called by %s). This is iteration #%s" %
         #     (which_callback, self.iteration))
@@ -64,7 +63,9 @@ class PlotWeights(SimpleExtension):
                                                   i,
                                                   self.iteration)
 
-            fig.add_subplot(111).imshow(w.get_value())
+            fig.add_subplot(111).imshow(w.get_value().T,
+                                        interpolation='nearest',
+                                        cmap="Blues")
             fig.add_subplot(111).set_xlabel(self.parameters['x_label'])
             fig.add_subplot(111).set_ylabel(self.parameters['y_label'])
             fig.add_subplot(111).set_title(title)
