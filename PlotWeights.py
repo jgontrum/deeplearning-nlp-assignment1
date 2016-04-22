@@ -4,7 +4,9 @@ from blocks.roles import WEIGHT
 from copy import deepcopy
 import matplotlib.pyplot as plt
 import os
+import logging
 
+logger = logging.getLogger(__name__)
 
 class PlotWeights(SimpleExtension):
     DEFAULT_PARAMETERS = {
@@ -31,13 +33,17 @@ class PlotWeights(SimpleExtension):
         super(PlotWeights, self).__init__(**super_kwargs)
 
     def do(self, which_callback, *args):
-        plt.clf()
+        # logger.info("Plotting weights (called by %s). This is iteration #%s" %
+        #     (which_callback, self.iteration))
+
         cg = self.parameters['computation_graph']
         self.iteration += 1
 
+        # Create main folder
         if not os.path.exists(self.parameters['folder'] + "/"):
             os.makedirs(self.parameters['folder'] + "/")
 
+        # Iterate over weight matrices and plot their weights
         for i, w in enumerate(VariableFilter(roles=[WEIGHT])(cg.variables)):
             fig = plt.figure()
             base_filename = self.parameters['folder'] + "/"
