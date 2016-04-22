@@ -3,6 +3,8 @@ import numpy as np
 import random
 from fuel.datasets import IndexableDataset
 from sklearn.feature_extraction import DictVectorizer
+from pprint import pprint
+
 
 mushroom_file = "data/mushrooms/agaricus-lepiota.data"
 
@@ -28,11 +30,20 @@ def get_mushroom_data():
     # Get the labels and the features as lists
     labels_, features_ = zip(*data)
 
+    feature_vectorizer = DictVectorizer(sparse=False, dtype=np.uint8)
+
+    label_vectorizer = DictVectorizer(sparse=False, dtype=np.uint8)
+
     # Create features and labels as numpy arrays with one hot encoding
-    features = DictVectorizer(
-        sparse=False, dtype=np.uint8).fit_transform(features_)
-    labels = DictVectorizer(
-        sparse=False, dtype=np.uint8).fit_transform(labels_)
+    features = feature_vectorizer.fit_transform(features_)
+    labels = label_vectorizer.fit_transform(labels_)
+
+    # Print the meaning of the one-hot encoded features
+    # for i, f in enumerate(feature_vectorizer.get_feature_names()):
+    #     print(f)
+    #
+    # for i, f in enumerate(label_vectorizer.get_feature_names()):
+    #     print(f)
 
     # Split into train and test.
     split_at = int(len(data) * 0.7)
@@ -52,5 +63,4 @@ def get_mushroom_data():
 
 
 if __name__ == '__main__':
-    get_mushroom_data()
-    # print(len(read_data()[0][1][0]))
+    train, test = get_mushroom_data()
