@@ -6,3 +6,5 @@
 Use the 'PlotWeights' extension for Blocks to plot the weight matrices as an image. Looks cool!
 
 Since matplotlib has issues with virtualenv, copy the 'frameworkpython' to the 'bin' directory of your venv and use it to run your scripts. Depending on your Python version, you may have to make some alterations to the script.
+
+'mlp.py' is the important file here.
