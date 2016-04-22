@@ -65,11 +65,11 @@ def shroom_mlp(shrooms_train, shrooms_test, num_epochs, hidden_dims,
 
     extensions = [
         ProgressBar(),
-        # PlotWeights(after_epoch=True,
-        #             folder="results",
-        #             computation_graph=cg,
-        #             folder_per_layer=True,
-        #             dpi=150),
+        PlotWeights(after_epoch=True,
+                    folder="results_logistic_40",
+                    computation_graph=cg,
+                    folder_per_layer=True,
+                    dpi=150),
         FinishAfter(after_n_epochs=num_epochs),
         DataStreamMonitoring(variables=[cost, error_rate],
                              data_stream=test_data_stream, prefix="test"),
@@ -87,6 +87,8 @@ def shroom_mlp(shrooms_train, shrooms_test, num_epochs, hidden_dims,
 
     main.run()
 
+    # print(error_rate())
+
     return 0
 
 if __name__ == '__main__':
@@ -95,31 +97,36 @@ if __name__ == '__main__':
     # Here are out corpora
     shrooms_train, shrooms_test = get_mushroom_data()
 
-    epochs = range(1, 11)
-    layers = range(10, 100, 10)
-    activation_functions = [
-        Logistic(),
-        Tanh(),
-        Linear(),
-        Softplus(),
-        Rectifier()
-    ]
+    shroom_mlp(shrooms_train,
+               shrooms_test,
+               10,
+               40,
+               Logistic())
 
-    results = []
-
-    for activation_function in activation_functions:
-        for epoch in epochs:
-            for layer in layers:
-                results.append((shroom_mlp(shrooms_train,
-                                           shrooms_test,
-                                           epoch,
-                                           layer,
-                                           activation_function),
-                               ({'epochs': epoch,
-                                 'layers': layer,
-                                 'function': activation_function
-                                 })))
-                 break
-
-    for result, configuration in sorted(results, key=lambda x: x[0]):
-        print(result, configuration)
+    # epochs = range(1, 11)
+    # layers = range(10, 100, 10)
+    # activation_functions = [
+    #     Logistic(),
+    #     Tanh(),
+    #     Linear(),
+    #     Softplus(),
+    #     Rectifier()
+    # ]
+    #
+    # results = []
+    #
+    # for activation_function in activation_functions:
+    #     for epoch in epochs:
+    #         for layer in layers:
+    #             results.append((shroom_mlp(shrooms_train,
+    #                                        shrooms_test,
+    #                                        epoch,
+    #                                        layer,
+    #                                        activation_function),
+    #                            ({'epochs': epoch,
+    #                              'layers': layer,
+    #                              'function': activation_function
+    #                              })))
+    #
+    # for result, configuration in sorted(results, key=lambda x: x[0]):
+    #     print(result, configuration)

@@ -8,6 +8,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class PlotWeights(SimpleExtension):
     DEFAULT_PARAMETERS = {
         "computation_graph": None,
@@ -31,6 +32,7 @@ class PlotWeights(SimpleExtension):
         if not self.parameters["computation_graph"]:
             raise ValueError("Please specify at least the computation_graph.")
         super(PlotWeights, self).__init__(**super_kwargs)
+
 
     def do(self, which_callback, *args):
         # logger.info("Plotting weights (called by %s). This is iteration #%s" %
