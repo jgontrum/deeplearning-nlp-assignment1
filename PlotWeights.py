@@ -65,7 +65,7 @@ class PlotWeights(SimpleExtension):
 
             fig.add_subplot(111).imshow(w.get_value().T,
                                         interpolation='nearest',
-                                        cmap="Blues")
+                                        cmap="RdBu")
             fig.add_subplot(111).set_xlabel(self.parameters['x_label'])
             fig.add_subplot(111).set_ylabel(self.parameters['y_label'])
             fig.add_subplot(111).set_title(title)

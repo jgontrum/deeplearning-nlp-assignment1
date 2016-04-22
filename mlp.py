@@ -47,7 +47,7 @@ def shroom_mlp(shrooms_train, shrooms_test, num_epochs, hidden_dims,
     cg = ComputationGraph(cost)
     # Not needed for now:
     W1, W2 = VariableFilter(roles=[WEIGHT])(cg.variables)
-    cost = cost + 0.001 * (W1 ** 2).sum() + 0.001 * (W2 ** 2).sum()
+    cost = cost + 0.01 * (W1 ** 2).sum() + 0.01 * (W2 ** 2).sum()
     cost.name = 'cost_with_regularization'
 
     error_rate = MisclassificationRate().apply(y.argmax(axis=1), y_hat)
@@ -88,8 +88,6 @@ def shroom_mlp(shrooms_train, shrooms_test, num_epochs, hidden_dims,
 
     main.run()
 
-    # print(error_rate())
-
     return 0
 
 if __name__ == '__main__':
@@ -100,9 +98,9 @@ if __name__ == '__main__':
 
     shroom_mlp(shrooms_train,
                shrooms_test,
-               100,
-               10,
-               Logistic())
+               2,
+               20,
+               Tanh())
 
     # epochs = range(1, 11)
     # layers = range(10, 100, 10)
